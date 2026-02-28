@@ -1,35 +1,44 @@
-<h1 align="center">Xsaprk Data Format</h1>
+<h1 align="center">Xspark Data Format</h1>
 
-## X-Ego V1
+> This repository documents the data formats and dataloaders used in Xspark AI projects. If you have any questions, feel free to open an Issue.<br> 
+> 此仓库用于介绍 Xspark AI 相关数据格式与 dataloader；如有任何问题，欢迎提 Issue 交流。
 
-This directory contains multimodal data for a single Episode, including multi-view videos, action annotations, hand pose recognition, and demo videos. Below is a detailed description of the main files.
+---
 
-### 1. Multi-view Camera Videos
+## Overview
 
-Contains raw videos from 3 different camera views, each with two downsampled resolution versions.
+This repo focuses on **standardizing multimodal robotics / ego data** and providing **reference dataloaders** so different embodiments and tasks can share a unified pipeline.
 
-| Filename                      | Camera View        | Resolution | Description                                       |
-| :---------------------------- | :----------------- | :--------- | :------------------------------------------------ |
-| `cam_head.mp4`                | Head Camera        | 1920x1080  | Raw video stream from head-mounted camera         |
-| `cam_head_640_360.mp4`        | Head Camera        | 640x360    | Downsampled video from head-mounted camera        |
-| `cam_head_320_240.mp4`        | Head Camera        | 320x240    | Downsampled video from head-mounted camera        |
-| `cam_left_wrist.mp4`          | Left Wrist Camera  | 1920x1080  | Raw video stream from left wrist-mounted camera   |
-| `cam_left_wrist_640_360.mp4`  | Left Wrist Camera  | 640x360    | Downsampled video from left wrist-mounted camera  |
-| `cam_left_wrist_320_240.mp4`  | Left Wrist Camera  | 320x240    | Downsampled video from left wrist-mounted camera  |
-| `cam_right_wrist.mp4`         | Right Wrist Camera | 1920x1080  | Raw video stream from right wrist-mounted camera  |
-| `cam_right_wrist_640_360.mp4` | Right Wrist Camera | 640x360    | Downsampled video from right wrist-mounted camera |
-| `cam_right_wrist_320_240.mp4` | Right Wrist Camera | 320x240    | Downsampled video from right wrist-mounted camera |
+Key goals:
+- Unified schema across embodiments (single-arm / dual-arm, grippers / dexterous hands, etc.)
+- Multimodal data organization (vision, actions, states, annotations, etc.)
+- Practical storage choices for scale (e.g., JPEG-compressed images in HDF5, MP4 for videos)
 
-### 2. Annotation Files
+---
 
-| Filename          | Description                                                  |
-| :---------------- | :----------------------------------------------------------- |
-| `caption.json`    | **Atomic action segments and language annotations**. Contains timestamp-based segmentation of video clips with corresponding natural language descriptions. |
-| `hand_poses.json` | **Hand pose recognition data**. Records hand keypoint detection results for each frame. **Coordinates are in camera coordinate system** |
+## Supported Formats
 
-### 3. Visualization & Demo
+| Format | Version | Storage | Best for | Document | Loader |
+|------:|:-------:|:--------|:---------|:---------|:------|
+| Xspark Data Format | v1.0 | Single **HDF5** (all modalities) | unified robotics datasets / cross-embodiment training | [data format document](./format/xspark_data_format_v1.0/README.md) | [dataloader](./format/xspark_data_format_v1.0/dataloader.py) |
+| X-Ego Format | v0.1 | Multi-file (**MP4** + **JSON**) | video-based X-Ego data & hand predictions | [data format document](./format/x-ego_v0.1/README.md) | [dataloader](./format/x-ego_v0.1/dataloader.py) |
 
-| Filename              | Resolution | Description                                                  |
-| :-------------------- | :--------- | :----------------------------------------------------------- |
-| `hand_poses.mp4`      | 640x360    | **Hand pose visualization video**. Visualizes hand pose recognition results from `hand_poses.json` overlaid on the original video. |
-| `preview_640_360.mp4` | 640x540    | **Data preview video (Demo)**. A stitched preview video composed of: (1) a 640x360 head camera view, and (2) two 320x180 wrist camera views (left and right) arranged side-by-side. Designed for quick multi-view preview of the episode content. |
+---
+
+## Xspark Data Format v1.0
+
+> Xspark Data Format v1.0 merges all modalities into a single HDF5 file to unify data across tasks and embodiments. Images are stored with JPEG compression, and the format supports single/dual-arm setups, two-finger grippers, dexterous hands, and MANO-based hand estimation (X-Ego), enabling cross-embodiment consistency.<br>
+> Xspark Data Format v1.0 将所有模态数据合并到单个 HDF5 文件中，实现跨任务、跨本体的统一数据表达；图像采用 JPEG 压缩存储，并支持单双臂、二指夹爪、灵巧手与基于 MANO 的手部估计（X-Ego），从而实现跨本体一致的数据组织。
+
+- 📄 **Data Format Document**: [data format document](./format/xspark_data_format_v1.0/README.md)
+- 🧩 **Data Loader Code**: [dataloader](./format/xspark_data_format_v1.0/dataloader.py)
+
+---
+
+## X-Ego Format v0.1
+
+> X-Ego Format v0.1 is designed for video-based X-Ego data stored in multiple files: visual observations are saved as MP4 videos at different resolutions, and additional JSON files store hand predictions and captions.<br> 
+> X-Ego Format v0.1 面向 Video-based 的 X-Ego 数据，采用多文件存储：不同分辨率的视觉观测以 MP4 文件保存，并使用额外的 JSON 文件存储手部预测与 caption 等信息。
+
+- 📄 **Data Format Document**: [data format document](./format/x-ego_v0.1/README.md)
+- 🧩 **Data Loader Code**: [dataloader](./format/x-ego_v0.1/dataloader.py)
