@@ -58,4 +58,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     data_dict = load_xspark_data(args.path, decode_images=False)
+    decoded_data_dict = load_xspark_data(args.path, decode_images=True)
     breakpoint()
