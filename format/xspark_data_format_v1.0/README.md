@@ -5,6 +5,34 @@
 
 This format use a single HDF5 file per episode to encapsulate multi-view visuals, robot proprioception, and high-level semantics.
 
+### Data Structure
+
+```
+Xspark Data Format v1.0  (one HDF5 file per episode)
+├── data_format_version                        (Dataset)  e.g. "v1.0"
+├── instructions                               (Dataset)  JSON-serialized string list
+├── subtasks                                   (Dataset)  JSON-serialized string list
+├── additional_info/                           (Group)
+│   └── frequency                              (Dataset)  int, Hz (e.g. 30)
+├── vision/                                    (Group)
+│   ├── cam_head/                              (Group)
+│   │   ├── colors                             (Dataset)  (N, byte_array) JPEG bytes per frame
+│   │   └── shape                              (Dataset)  (3,) [H, W, C]
+│   ├── cam_left_wrist/                        (Group)
+│   │   ├── colors                             (Dataset)  (N, byte_array) JPEG bytes per frame
+│   │   └── shape                              (Dataset)  (3,) [H, W, C]
+│   └── cam_right_wrist/                       (Group)
+│       ├── colors                             (Dataset)  (N, byte_array) JPEG bytes per frame
+│       └── shape                              (Dataset)  (3,) [H, W, C]
+└── state/                                     (Group)
+    ├── left_arm_joint_states                  (Dataset)  (N, DOF) radians
+    ├── left_ee_joint_states                   (Dataset)  (N, 1)  gripper opening
+    ├── left_ee_poses                          (Dataset)  (N, 7)  [x,y,z,qx,qy,qz,qw]
+    ├── right_arm_joint_states                 (Dataset)  (N, DOF) radians
+    ├── right_ee_joint_states                  (Dataset)  (N, 1)  gripper opening
+    └── right_ee_poses                         (Dataset)  (N, 7)  [x,y,z,qx,qy,qz,qw]
+```
+
 ---
 
 ### 1. Structure Overview
