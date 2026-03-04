@@ -27,10 +27,10 @@ Xspark Data Format v1.0  (one HDF5 file per episode)
 └── state/                                     (Group)
     ├── left_arm_joint_states                  (Dataset)  (N, DOF) radians
     ├── left_ee_joint_states                   (Dataset)  (N, 1)  gripper opening
-    ├── left_ee_poses                          (Dataset)  (N, 7)  [x,y,z,qx,qy,qz,qw]
+    ├── left_ee_poses                          (Dataset)  (N, 7)  [x,y,z,qx,qy,qz,qw] or (N, 6) [x,y,z,r,p,y]
     ├── right_arm_joint_states                 (Dataset)  (N, DOF) radians
     ├── right_ee_joint_states                  (Dataset)  (N, 1)  gripper opening
-    └── right_ee_poses                         (Dataset)  (N, 7)  [x,y,z,qx,qy,qz,qw]
+    └── right_ee_poses                         (Dataset)  (N, 7)  [x,y,z,qx,qy,qz,qw] or (N, 6) [x,y,z,r,p,y]
 ```
 
 ---
@@ -73,10 +73,10 @@ Records synchronized joint positions and end-effector cartesian poses.
 | :--- | :--- | :--- |
 | `left_arm_joint_states` | (N, DOF) | Left arm joint angles (Radians). |
 | `left_ee_joint_states` | (N, 1) | Left gripper/actuator opening state. |
-| `left_ee_poses` | (N, 7) | Left EE pose in world frame (XYZ + Quat). |
+| `left_ee_poses` | (N, 7) | Left EE pose in world frame (XYZ + Quat 7Dims) or (XYZ + rpy 6Dims). |
 | `right_arm_joint_states`| (N, DOF) | Right arm joint angles (Radians). |
 | `right_ee_joint_states` | (N, 1) | Right gripper/actuator opening state. |
-| `right_ee_poses` | (N, 7) | Right EE pose in world frame (XYZ + Quat). |
+| `right_ee_poses` | (N, 7) | Right EE pose in world frame (XYZ + Quat 7 Dims) or (XYZ + rpy 6Dims). |
 
 ---
 
